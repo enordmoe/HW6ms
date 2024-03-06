@@ -1,0 +1,144 @@
+---
+title: "Math 265: Homework 6"
+subtitle: "Mapping and Scraping!"
+author: "Be Sure to Put Your Name Here"  
+format: 
+    html: 
+      toc: true
+      number-sections: true
+      number-depth: 3
+      theme: minty
+editor: visual
+---
+
+```{r}
+#| label: setup
+#| include: false
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+# Mapping County Census Data \[12 points\]
+
+```{r, include = FALSE}
+library(maps)
+```
+
+Knowing how to access and work with census data is an important skill for any data scientist. For this question, you will need to import census data and access the information you need to construct choropleth county-level maps reflecting the proportion of the population who are older adults.
+
+The `data` directory contains files you will need to carry out this analysis:
+
+-   `AGE03.csv`: census file containing the data you will need (and much more that you do not need!)
+
+-   `Mastdata.xls`: spreadsheet containing a list of more than 6000 census items (with descriptions) that are available at the county level.
+
+**1)** Open `Mastdata.xls` outside of RStudio (in Excel or Google Sheets) and find the name of the one item which contains this very specific information: "Resident population 65 years and over, percent (July 1 - estimate) 2009". Write down the variable name (known in Census jargon as `Item_Id`).
+
+**Answer:**
+
+```{r}
+
+```
+
+**2)** Now use an appropriate `readr()` statement to read the entire `AGE03.csv` data file into a tibble called `census_data`.
+
+**Answer:**
+
+```{r}
+
+```
+
+**3)** Select from `census_data` only the columns and rows you will need to graph the percent of residents 65 and over for each county in the mainland US, excluding DC, Hawaii, and Alaska. Use appropriate commands to select the columns and rows you need and/or exclude those you do not need. (The column `STCOU` gives state and county codes and may be useful in selecting/filtering rows.) Save the data set under the name `county_age_data`.
+
+**Answer:**
+
+```{r}
+
+```
+
+**4)** To combine the census data with the mapping data will require a couple of steps. First split the `Areaname` variable into a variable called `subregion` which contains the county name and `region` which contains the state abbreviation. Call this new file `county_age_data2`.
+
+**Answer:**
+
+```{r}
+
+```
+
+**5)** In order to use the county level mapping data, we need the state name rather than just the abbreviation. Create a "crosswalk" or look-up table (actually a tibble) using the R built-in variables **state.abb** and **state.name** (they're part of Base R and always available). Your new tibble should contain fifty rows, one for each state and two columns, one for the state 2-letter abbreviation and one for the state name. Use this `crosswalk` table to add the column of state names to your county data. Call the new data set `county_age_data3`. (Note: If we did this all in one long pipe, we would not need intermediate names but it might also get more confusing the first time through.)
+
+**Answer:**
+
+```{r}
+
+```
+
+**6)** Now join the county level data to the mapping data from the package **maps** we used in class. Call the new data set `merged_county()`. Create a county-level map of the U.S that maps the proportion of the population 65 and over to the "fill" aesthetic. You can use whatever color scheme you like. (Hint: If you get everything to work but see some holes in your map, don't worry. Continue to the next part.)
+
+**Answer:**
+
+```{r}
+
+```
+
+**7)** Unless you have been very thorough, your map likely has some holes in it because not all county names matched correctly. Use `anti_join()` to identify the counties with no matches. By looking at the original data, identify at least 2 reasons why matches failed.
+
+**Answer:**
+
+```{r}
+
+```
+
+**8)** Create a subset of the census data for only counties in Florida. Use string functions to fix the unmatched county names in Florida so that each Florida county has complete data. Use this data set to create a Florida county map with counties shaded by percent of the population 65 and over.
+
+**Answer:**
+
+```{r}
+
+```
+
+**9)** Within Florida, where are high concentrations of seniors? Look at your map and comment on any patterns you see.
+
+**Answer:**
+
+# Scraping the Top Movies of 2022 \[8 points\]
+
+For this problem, use the `rvest` package to scrape data from IDMB's list of the top 100 movies released in 2022
+
+```{r}
+#| message: false
+library(rvest)
+```
+
+**1)** Use `read_html()` to read the data from the link <https://web.archive.org/web/20230116073735/https://www.imdb.com/list/ls530915139/>. Call the object you created `movie_parse`.[^1]
+
+[^1]: Over time, changes in the structure of web pages can make the page incompatible with the scraping methods described here. For this reason, the link above is obtained from the Web Archive Wayback Machine which depicts this page as it was in January of 2023.
+
+**Answer:**
+
+```{r}
+
+```
+
+**2)** Now use \[selector gadget\](<https://rvest.tidyverse.org/articles/selectorgadget.html>) as we did in class to identify the CSS selectors for ranking (out of 100), title, running time, genre(s), IMDBscore, director and number of votes[^2]. Where appropriate, parse the data to numeric variables. Save the data in a tibble called `movie_data`. (Hint: If you run into unexpected results, troubleshoot and take appropriate action so that you end up with a data set of 100 rows. It is possible that there will a missing, NA value, or extra values somewhere along the way. Watch out for such situations.)
+
+[^2]: Number of votes may require some tweaking using data wrangling functions to ensure you have one case per movie.
+
+**Answer:**
+
+```{r}
+
+```
+
+**3)** Use `mutate()` to add two new **logical** variables to your data set: one called `drama` if the movie was classified with the "drama" genre tag and `comedy` if tagged as a "comedy". Store the data including the new variables in a tibble called `movie_data2`.
+
+```{r}
+
+```
+
+**4)** Then generate a scatterplot of one of the IMDB Rating (y) against the running time of the film (x), sizing points using the number of votes and labeling at least one point with the title of the movie. Comment on the strength of the relationship and identify any outliers.
+
+**Answer:**
+
+```{r}
+
+```
